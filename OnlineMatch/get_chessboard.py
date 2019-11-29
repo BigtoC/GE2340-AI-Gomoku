@@ -47,6 +47,7 @@ async def start_computer_game():
 
     # Uncheck 4 line warning
     await page.click("#cbWarn")
+    mon.random_wait()
 
     # Click start
     start_btn_selector = "#btnPlay"
