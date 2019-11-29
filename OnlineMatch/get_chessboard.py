@@ -63,11 +63,8 @@ async def get_img_position() -> dict:
     Get the chessboard location
     :return: Location tuple
     """
-    board_selector = "#lichess > div.round.cg-512 > div.top > div > div.lichess_board_wrap > div > div > div"
 
-    while not await gb.page.J("#lichess > div.round.cg-512 > div.top > div > div.lichess_ground > div.table_wrap"):
-        mon.random_wait()
-
+    board_selector = "#grid"
     chessboard = await gb.page.J(board_selector)
     location = await chessboard.boundingBox()  # location is a dict
     mon.print_time_and_msg(f"Got chessboard location: {location}")
@@ -95,7 +92,7 @@ if __name__ == '__main__':
     asyncio.get_event_loop().run_until_complete(
         start_computer_game()
     )
-    # asyncio.get_event_loop().run_until_complete(
-    #     get_chessboard_img("me")
-    # )
+    asyncio.get_event_loop().run_until_complete(
+        get_chessboard_img("me")
+    )
 
