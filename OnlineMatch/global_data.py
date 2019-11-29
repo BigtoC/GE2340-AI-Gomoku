@@ -27,5 +27,13 @@ level_selectors = {
 level_choice = 3
 level_selector = level_selectors[level_choice]
 
+board_start_x = -1
+board_start_y = -1
+board_location = None
+
+last_place_x = -1
+last_place_y = -1
+last_computer_x = -1
+last_computer_y = -1
 
 winner = ""

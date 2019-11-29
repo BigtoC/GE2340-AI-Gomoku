@@ -3,6 +3,7 @@
 from pyppeteer import launch
 import asyncio
 import nest_asyncio
+
 import OnlineMatch.global_data as gb
 import OnlineMatch.monitor_result as mon
 
@@ -30,6 +31,10 @@ async def start_computer_game():
         mon.random_wait()
     mon.print_time_and_msg(f"Website is rendered!")
 
+    asyncio.get_event_loop().run_until_complete(
+        get_chessboard_img("start")
+    )
+
     # Select opponent
     # await page.click(gb.opponent_selector)
     # mon.print_time_and_msg(f"Selected opponent as {gb.opponent_choice}")
@@ -56,19 +61,22 @@ async def start_computer_game():
     mon.random_wait()
 
     gb.page = page
+    asyncio.get_event_loop().run_until_complete(get_img_position())
 
 
-async def get_img_position() -> dict:
+async def get_img_position():
     """
     Get the chessboard location
-    :return: Location tuple
+    :return: None
     """
 
     board_selector = "#grid"
     chessboard = await gb.page.J(board_selector)
     location = await chessboard.boundingBox()  # location is a dict
     mon.print_time_and_msg(f"Got chessboard location: {location}")
-    return location
+    gb.board_start_x = location['x']
+    gb.board_start_y = location['y']
+    gb.board_location = location
 
 
 async def get_chessboard_img(who: str):
@@ -77,12 +85,11 @@ async def get_chessboard_img(who: str):
     :param: Who moved
     :return: None
     """
-    board_location = asyncio.get_event_loop().run_until_complete(get_img_position())
 
     captcha_option = {
         "path": f"Pictures/chessboard-{who}.png",
         "type": "png",
-        "clip": board_location
+        "clip": gb.board_location
     }
     await gb.page.screenshot(captcha_option)
     mon.print_time_and_msg(f"Took screenshot chessboard-{who}.png")

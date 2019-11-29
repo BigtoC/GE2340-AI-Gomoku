@@ -4,12 +4,19 @@ import cv2
 import imutils
 from skimage.measure import compare_ssim
 import math
+import numpy as np
+import collections
+
+import OnlineMatch.global_data as gb
+import OnlineMatch.monitor_result as mon
 
 
-def get_opponent_move() -> dict:
+def get_opponent_move() -> tuple:
     """
     get opponent movement by examining screenshots
-    :return:
+    :return: opponent's chess coordinate
+    :reference: https://www.jianshu.com/p/eb5026288d88,
+                https://blog.csdn.net/hjxu2016/article/details/77833984
     """
     img_me = cv2.imread("Pictures/chessboard-me.png")
     img_opp = cv2.imread("Pictures/chessboard-opp.png")
@@ -25,37 +32,35 @@ def get_opponent_move() -> dict:
     cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cnts = imutils.grab_contours(cnts)
 
-    movement = {}
+    col = -1
+    row = -1
 
     for c in cnts:
         (x, y, w, h) = cv2.boundingRect(c)
-        cv2.rectangle(img_me, (x, y), (x + w, y + h), (0, 0, 255), 2)
-        cv2.rectangle(img_opp, (x, y), (x + w, y + h), (0, 0, 255), 2)
+        if x == gb.last_place_x and y == gb.last_place_y:
+            continue
+        else:
+            cv2.rectangle(img_me, (x, y), (x + w, y + h), (0, 0, 255), 2)
+            cv2.rectangle(img_opp, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
-        col = math.ceil(x / 64)
-        row = math.ceil(y / 64)
-
-        is_chess = find_chess((x, y, w, h))
-
+            gb.last_computer_x = x
+            gb.last_computer_y = y
+            col = math.ceil(x / 38)
+            row = math.ceil(y / 38)
 
     cv2.imshow("Diff", img_opp)
     cv2.imwrite("Pictures/diff.png", img_opp)
-    cv2.imwrite("Pictures/img_opp_gray.png", img_opp_gray)
     cv2.waitKey(0)
 
-    # round(x)
+    return col, row
 
 
-def find_chess(coord: tuple) -> bool:
-    (x, y, w, h) = coord
-    x_start = int(x / 64)
-    y_start = int(y / 64)
-    x_end = x_start + 64
-    y_end = y_start + 64
-
-
-    return True
-
+async def move():
+    place_x = gb.board_start_x + 38 * 2
+    gb.last_place_x = place_x
+    place_y = gb.board_start_y + 38 * 2
+    gb.last_place_y = place_y
+    gb.page.mouse.click(place_x, place_y)
 
 
 if __name__ == '__main__':
