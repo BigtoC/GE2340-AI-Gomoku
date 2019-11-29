@@ -34,7 +34,7 @@ async def is_my_turn() -> bool:
     :return: True is my turn, False is not
     """
     my_turn = False
-    my_turn_html = '<div class="whos_turn">Your Turn</div>'
+    my_turn_html = 'You to play'
 
     source = Bs(await gb.page.content(), 'lxml').prettify()
 
@@ -52,7 +52,11 @@ async def match_result() -> bool:
     is_end = False
 
     source = Bs(await gb.page.content(), 'lxml').prettify()
-    win_regex = re.compile(r'<p class=\"status (\S+)\"></p>')
+
+    if "won" in source:
+        is_end = True
+
+    win_regex = re.compile(r'<div id="mess" class="message" style="left: 185px; top: 550px;">(\S+) has won.</div>')
     winner = re.findall(win_regex, source)[0]
 
     if len(winner) > 1:
