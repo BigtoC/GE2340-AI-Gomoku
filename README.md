@@ -24,7 +24,7 @@ Group Project for [GE2340](https://www.cityu.edu.hk/catalogue/ug/current/course/
    1. check if is my turn
    2. monitor from source code and judge the result
    3. print console message with time
-   4.function help the program randomly wait some time
+   4. function help the program randomly wait some time
 5. **global_data**
    1. store data
    2. store user's input
