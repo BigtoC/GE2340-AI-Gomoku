@@ -24,20 +24,32 @@ async def start_computer_game():
     page = await gb.browser.newPage()
 
     await page.setViewport({'width': 1920, 'height': 1080})
-    await page.goto(gb.game_url, {'timeout': 10000 * 30})
+    await page.goto(url, {'timeout': 10000 * 30})
 
-    # Select level
-    await page.click(gb.level_selector)
-    mon.print_time_and_msg(f"Selected level {gb.level_choice}")
-    mon.random_wait()
+    while not await page.J("#newgame"):
+        mon.random_wait()
+    mon.print_time_and_msg(f"Website is rendered!")
+
+    # Select opponent
+    # await page.click(gb.opponent_selector)
+    # mon.print_time_and_msg(f"Selected opponent as {gb.opponent_choice}")
+    # mon.random_wait()
 
     # Select color
     await page.click(gb.color_selector)
     mon.print_time_and_msg(f"Color selected as {gb.start_color}")
     mon.random_wait()
 
+    # Select level
+    await page.click(gb.level_selector)
+    mon.print_time_and_msg(f"Selected level {gb.level_choice}")
+    mon.random_wait()
+
+    # Uncheck 4 line warning
+    await page.click("#cbWarn")
+
     # Click start
-    start_btn_selector = "#hooks_wrap > div > form > div.color_submits > button"
+    start_btn_selector = "#btnPlay"
     await page.click(start_btn_selector)
     mon.print_time_and_msg(f"Clicked start button ")
     mon.random_wait()
@@ -82,7 +94,7 @@ if __name__ == '__main__':
     asyncio.get_event_loop().run_until_complete(
         start_computer_game()
     )
-    asyncio.get_event_loop().run_until_complete(
-        get_chessboard_img("me")
-    )
+    # asyncio.get_event_loop().run_until_complete(
+    #     get_chessboard_img("me")
+    # )
 

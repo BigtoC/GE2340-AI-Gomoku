@@ -2,7 +2,7 @@
 Group Project for [GE2340](https://www.cityu.edu.hk/catalogue/ug/current/course/GE2340.htm) &lt;AI:Past, Present, and Future>, play Gomoku online 
   
 1. Reproduce existing methods of AlphaZero.
-2. Play online matches using AlphaZero (Here's the [match website](http://gomoku.yjyao.com/))  
+2. Play online matches using AlphaZero (Here's the [match website](https://dkmgames.com/Gomoku/gomoku.htm))  
 
 ---
   
