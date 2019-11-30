@@ -6,8 +6,10 @@ Group Project for [GE2340](https://www.cityu.edu.hk/catalogue/ug/current/course/
 
 ---
   
+## AlphaZero
+#### Train Model using existing AlphaZero Algorithm  
   
-## Code Structure of Online-Match
+## Online-Match
 #### Controls the browser to auto match online using [Pyppeteer](https://github.com/miyakogi/pyppeteer)
 1. **main**
    1. global control and run all modules
