@@ -4,8 +4,6 @@ import cv2
 import imutils
 from skimage.measure import compare_ssim
 import math
-import numpy as np
-import collections
 import pysnooper
 
 import OnlineMatch.global_data as gb
@@ -63,9 +61,11 @@ def get_opponent_move() -> tuple:
         else:
             col, row = cal_coord(cv2, img_me, img_opp, x, y, const_b, const_b)
 
-    cv2.imshow("Diff", img_opp)
+    # cv2.imshow("Diff", img_opp)
     cv2.imwrite("Pictures/diff.png", img_opp)
-    cv2.waitKey(0)
+    # cv2.waitKey(0)
+
+    mon.print_time_and_msg(f"Opponent placed on [{col}, {row}]")
 
     return col, row
 
@@ -90,6 +90,8 @@ async def move():
     place_y = gb.board_start_y + 38 * row
     gb.last_place_y = place_y
     gb.page.mouse.click(place_x, place_y)
+
+    mon.print_time_and_msg(f"I placed on [{col}, {row}]")
 
 
 if __name__ == '__main__':

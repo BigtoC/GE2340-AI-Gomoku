@@ -58,6 +58,7 @@ async def match_result() -> bool:
 
     win_regex = re.compile(r'<div id="mess" class="message" style="left: 185px; top: 550px;">(\S+) has won.</div>')
     winner = re.findall(win_regex, source)[0]
+    gb.winner = winner
 
     if len(winner) > 1:
         is_end = True
