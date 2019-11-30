@@ -5,6 +5,11 @@ Group Project for [GE2340](https://www.cityu.edu.hk/catalogue/ug/current/course/
 2. Play online matches using AlphaZero (Here's the [match website](https://dkmgames.com/Gomoku/gomoku.htm))  
 
 ---
+
+## Configuration
+- tensorboard         1.10.0
+- tensorflow          1.10.0
+- tensorlayer         1.10.1
   
 ## AlphaZero
 #### Train Model using existing AlphaZero Algorithm  

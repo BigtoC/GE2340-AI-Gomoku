@@ -8,7 +8,7 @@ from os import path
 import os
 from collections import defaultdict
 
-import get_internet_move as internet
+from OnlineMatch import get_internet_move as internet
 
 class Human(object):
     """
@@ -28,7 +28,7 @@ class Human(object):
             height = internet.width_height_coord[1]
 
             location = width + height * 15
-            
+
             move = board.location_to_move(location)
         except Exception as e:
             move = -1
