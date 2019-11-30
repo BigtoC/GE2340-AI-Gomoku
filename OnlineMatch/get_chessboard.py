@@ -9,7 +9,6 @@ import OnlineMatch.monitor_result as mon
 
 nest_asyncio.apply()
 
-
 async def start_computer_game():
     """
     Go to the match ready page
