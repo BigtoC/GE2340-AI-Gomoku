@@ -1,14 +1,15 @@
 from __future__ import print_function
-from game_board import Board, Game
-from mcts_pure import MCTSPlayer as MCTS_pure
-from mcts_alphaZero import MCTSPlayer
-from policy_value_net_tensorlayer import PolicyValueNet
+from AlphaZero.game_board import Board, Game
+from AlphaZero.mcts_pure import MCTSPlayer as MCTS_pure
+from AlphaZero.mcts_alphaZero import MCTSPlayer
+from AlphaZero.policy_value_net_tensorlayer import PolicyValueNet
 import time
 from os import path
 import os
 from collections import defaultdict
 
-import get_internet_move as internet
+import OnlineMatch.get_internet_move as internet
+
 
 class Human(object):
     """
@@ -39,6 +40,7 @@ class Human(object):
 
     def __str__(self):
         return "Human {}".format(self.player)
+
 
 def run(start_player=0,is_shown=1):
     # run a gomoku game with AI

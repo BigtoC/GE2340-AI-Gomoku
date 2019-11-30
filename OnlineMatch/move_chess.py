@@ -9,7 +9,8 @@ import random
 
 import OnlineMatch.global_data as gb
 import OnlineMatch.monitor_result as mon
-import OnlineMatch.internet_export_move as im
+import OnlineMatch.get_internet_move as im
+import AlphaZero.get_alphazero_move as az
 
 
 # @pysnooper.snoop()
@@ -85,11 +86,11 @@ def cal_coord(cv2, img_me, img_opp, x, y, w, h):
 
 
 async def move():
-    col, row = int(random.uniform(0, 15)), int(random.uniform(0, 15))
+    col, row = az.width_height_coord
 
-    while col == gb.last_computer_x and row == gb.last_computer_y \
-            or col == gb.last_place_x and row == gb.last_place_y:
-        col, row = mon.test_placement() * 38, mon.test_placement() * 38
+    # while col == gb.last_computer_x and row == gb.last_computer_y \
+    #         or col == gb.last_place_x and row == gb.last_place_y:
+    #     col, row = mon.test_placement() * 38, mon.test_placement() * 38
 
     place_x = gb.board_start_x + 38 * col
     gb.last_place_x = place_x

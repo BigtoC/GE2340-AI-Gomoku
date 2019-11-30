@@ -313,6 +313,7 @@ class PolicyValueNet():
 
         return resnet
 
+
 class MyActLayer(Layer):
     '''
     define an activation layer
