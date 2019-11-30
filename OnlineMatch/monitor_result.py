@@ -65,10 +65,13 @@ async def print_result():
     Print the winner
     :return: None
     """
-    source = Bs(await gb.page.content(), 'lxml')
+    source = Bs(await gb.page.content(), 'lxml').prettify()
+    with open('source.html') as f:
+        f.write(source)
+        f.close()
     win_regex = re.compile(r'<div id="mess" class="message" style="left: 185px; top: 550px;">(\S+) has won.</div>')
     try:
-        winner = re.findall(win_regex, str(source))[0]
+        winner = re.findall(win_regex, source)[0]
         print_time_and_msg(f"CHECKMATE! {winner} wins!")
     except IndexError:
         pass
