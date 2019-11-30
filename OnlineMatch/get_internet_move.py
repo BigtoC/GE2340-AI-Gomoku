@@ -1,3 +1,5 @@
+import OnlineMatch.global_data as gb
+
 width_height_coord = [-1, -1]
 
 
