@@ -31,9 +31,9 @@ board_start_x = -1
 board_start_y = -1
 board_location = None
 
-last_place_x = -1
-last_place_y = -1
-last_computer_x = -1
-last_computer_y = -1
+last_place_x = 76
+last_place_y = 76
+last_computer_x = 228
+last_computer_y = 228
 
 winner = ""
