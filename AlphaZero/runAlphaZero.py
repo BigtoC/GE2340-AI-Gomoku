@@ -8,6 +8,8 @@ from os import path
 import os
 from collections import defaultdict
 
+import get_internet_move as internet
+
 class Human(object):
     """
     human player
@@ -22,9 +24,11 @@ class Human(object):
         # no use params in the func : is_selfplay,print_probs_value
         # just to stay the same with AI's API
         try:
-            location = input("Your move: ")
-            if isinstance(location, str):  # for python3
-                location = [int(n, 10) for n in location.split(",")]
+            width = internet.width_height_coord[0]
+            height = internet.width_height_coord[1]
+
+            location = width + height * 15
+            
             move = board.location_to_move(location)
         except Exception as e:
             move = -1
