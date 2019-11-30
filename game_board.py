@@ -9,10 +9,12 @@ import numpy as np
 from collections import deque
 from GUI_v1_4 import GUI
 
+
 class Board(object):
-    '''
+    """
     board for the game
-    '''
+    """
+
     def __init__(self, **kwargs):
         self.width = int(kwargs.get('width', 11))
         self.height = int(kwargs.get('height', 11))
@@ -33,14 +35,14 @@ class Board(object):
         # the additional plane is the color feature that indicate the current player
         # for example, in 11x11 board, is 11x11x9,8 for history features and 1 for current player
         self.states_sequence = deque(maxlen=self.feature_planes)
-        self.states_sequence.extendleft([[-1,-1]] * self.feature_planes)
-        #use the deque to store last 8 moves
+        self.states_sequence.extendleft([[-1, -1]] * self.feature_planes)
+        # use the deque to store last 8 moves
         # fill in with [-1,-1] when one game start to indicate no move
 
     def init_board(self, start_player=0):
-        '''
+        """
         init the board and set some variables
-        '''
+        """
         if self.width < self.n_in_row or self.height < self.n_in_row:
             raise Exception('board width and height can not be '
                             'less than {}'.format(self.n_in_row))
@@ -55,7 +57,7 @@ class Board(object):
         self.states_sequence.extendleft([[-1, -1]] * self.feature_planes)
 
     def move_to_location(self, move):
-        '''
+        """
         transfer move number to coordinate
 
         3*3 board's moves like:
@@ -63,15 +65,15 @@ class Board(object):
         3 4 5
         0 1 2
         and move 5's location is (1,2)
-        '''
+        """
         h = move // self.width
         w = move % self.width
         return [h, w]
 
     def location_to_move(self, location):
-        '''
+        """
         transfer coordinate to move number
-        '''
+        """
         if len(location) != 2:
             return -1
         h = location[0]
@@ -82,11 +84,11 @@ class Board(object):
         return move
 
     def current_state(self):
-        '''
+        """
         return the board state from the perspective of the current player.
         state shape: (self.feature_planes+1) x width x height
-        '''
-        square_state = np.zeros((self.feature_planes+1, self.width, self.height))
+        """
+        square_state = np.zeros((self.feature_planes + 1, self.width, self.height))
         if self.states:
             moves, players = np.array(list(zip(*self.states.items())))
             # states contain the (key,value) indicate (move,player)
@@ -102,21 +104,25 @@ class Board(object):
             # to construct the binary feature planes as alphazero did
             for i in range(self.feature_planes):
                 # put all moves on planes
-                if i%2 == 0:
-                    square_state[i][move_oppo // self.width,move_oppo % self.height] = 1.0
+                if i % 2 == 0:
+                    square_state[i][move_oppo // self.width, move_oppo % self.height] = 1.0
                 else:
-                    square_state[i][move_curr // self.width,move_curr % self.height] = 1.0
+                    square_state[i][move_curr // self.width, move_curr % self.height] = 1.0
             # delete some moves to construct the planes with history features
-            for i in range(0,len(self.states_sequence)-2,2):
-                for j in range(i+2,len(self.states_sequence),2):
-                    if self.states_sequence[i][1]!= -1:
-                        assert square_state[j][self.states_sequence[i][0] // self.width,self.states_sequence[i][0] % self.height] == 1.0, 'wrong oppo number'
-                        square_state[j][self.states_sequence[i][0] // self.width, self.states_sequence[i][0] % self.height] = 0.
-            for i in range(1,len(self.states_sequence)-2,2):
-                for j in range(i+2,len(self.states_sequence),2):
+            for i in range(0, len(self.states_sequence) - 2, 2):
+                for j in range(i + 2, len(self.states_sequence), 2):
                     if self.states_sequence[i][1] != -1:
-                        assert square_state[j][self.states_sequence[i][0] // self.width,self.states_sequence[i][0] % self.height] ==1.0, 'wrong player number'
-                        square_state[j][self.states_sequence[i][0] // self.width, self.states_sequence[i][0] % self.height] = 0.
+                        assert square_state[j][self.states_sequence[i][0] // self.width, self.states_sequence[i][
+                            0] % self.height] == 1.0, 'wrong oppo number'
+                        square_state[j][
+                            self.states_sequence[i][0] // self.width, self.states_sequence[i][0] % self.height] = 0.
+            for i in range(1, len(self.states_sequence) - 2, 2):
+                for j in range(i + 2, len(self.states_sequence), 2):
+                    if self.states_sequence[i][1] != -1:
+                        assert square_state[j][self.states_sequence[i][0] // self.width, self.states_sequence[i][
+                            0] % self.height] == 1.0, 'wrong player number'
+                        square_state[j][
+                            self.states_sequence[i][0] // self.width, self.states_sequence[i][0] % self.height] = 0.
 
         if len(self.states) % 2 == 0:
             # if %2==0，it's player1's turn to player,then we assign 1 to the the whole plane,otherwise all 0
@@ -133,16 +139,16 @@ class Board(object):
         return square_state[:, ::-1, :]
 
     def do_move(self, move):
-        '''
+        """
         update the board
-        '''
+        """
         # print(self.states,move,self.current_player,self.players)
         self.states[move] = self.current_player
         # save the move in states
-        self.states_sequence.appendleft([move,self.current_player])
+        self.states_sequence.appendleft([move, self.current_player])
         # save the last some moves in deque，so as to construct the binary feature planes
         self.availables.remove(move)
-        #remove the played move from self.availables
+        # remove the played move from self.availables
         self.current_player = (
             self.players[0] if self.current_player == self.players[1]
             else self.players[1]
@@ -151,9 +157,9 @@ class Board(object):
         self.last_move = move
 
     def has_a_winner(self):
-        '''
+        """
         judge if there's a 5-in-a-row, and which player if so
-        '''
+        """
         width = self.width
         height = self.height
         states = self.states
@@ -193,9 +199,9 @@ class Board(object):
         return False, -1
 
     def game_end(self):
-        '''
+        """
         Check whether the game is end
-        '''
+        """
         end, winner = self.has_a_winner()
         if end:
             # if one win,return the winner
@@ -206,25 +212,27 @@ class Board(object):
         return False, -1
 
     def get_current_player(self):
-        '''
+        """
         return current player
-        '''
+        """
         return self.current_player
 
+
 class Game(object):
-    '''
+    """
     game server
-    '''
+    """
+
     def __init__(self, board, **kwargs):
-        '''
+        """
         init a board
-        '''
+        """
         self.board = board
 
     def graphic(self, board, player1, player2):
-        '''
+        """
         Draw the board and show game info
-        '''
+        """
         width = board.width
         height = board.height
 
@@ -252,10 +260,10 @@ class Game(object):
             # print('\r\n') # new line
             print('\r')
 
-    def start_play(self, player1, player2, start_player=0, is_shown=1,print_prob =True):
-        '''
+    def start_play(self, player1, player2, start_player=0, is_shown=1, print_prob=True):
+        """
         start a game between two players
-        '''
+        """
         if start_player not in (0, 1):
             raise Exception('start_player should be either 0 (player1 first) '
                             'or 1 (player2 first)')
@@ -272,7 +280,7 @@ class Game(object):
         while True:
             current_player = self.board.get_current_player()
             player_in_turn = players[current_player]
-            move,move_probs = player_in_turn.get_action(self.board,is_selfplay=False,print_probs_value=print_prob)
+            move, move_probs = player_in_turn.get_action(self.board, is_selfplay=False, print_probs_value=print_prob)
             print('--------------------------------')
             print(move)
             print('--------------------------------')
@@ -291,12 +299,11 @@ class Game(object):
                         print("Game end. Tie")
                 return winner
 
-
     def start_self_play(self, player, is_shown=0):
-        '''
+        """
         start a self-play game using a MCTS player, reuse the search tree,
         and store the self-play data: (state, mcts_probs, z) for training
-        '''
+        """
         self.board.init_board()
         p1, p2 = self.board.players
         states, mcts_probs, current_players = [], [], []
@@ -327,5 +334,3 @@ class Game(object):
                     else:
                         print("Game end. Tie")
                 return winner, zip(states, mcts_probs, winners_z)
-
-
