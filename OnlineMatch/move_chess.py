@@ -5,9 +5,11 @@ import imutils
 from skimage.measure import compare_ssim
 import math
 import pysnooper
+import random
 
 import OnlineMatch.global_data as gb
 import OnlineMatch.monitor_result as mon
+import OnlineMatch.internet_export_move as im
 
 
 # @pysnooper.snoop()
@@ -71,7 +73,6 @@ def get_opponent_move() -> tuple:
 
 
 def cal_coord(cv2, img_me, img_opp, x, y, w, h):
-
     cv2.rectangle(img_me, (x, y), (x + w, y + h), (0, 0, 255), 2)
     cv2.rectangle(img_opp, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
@@ -84,12 +85,17 @@ def cal_coord(cv2, img_me, img_opp, x, y, w, h):
 
 
 async def move():
-    col, row = 1, 1
+    col, row = int(random.uniform(0, 15)), int(random.uniform(0, 15))
+
+    while col == gb.last_computer_x and row == gb.last_computer_y \
+            or col == gb.last_place_x and row == gb.last_place_y:
+        col, row = mon.test_placement() * 38, mon.test_placement() * 38
+
     place_x = gb.board_start_x + 38 * col
     gb.last_place_x = place_x
     place_y = gb.board_start_y + 38 * row
     gb.last_place_y = place_y
-    gb.page.mouse.click(place_x, place_y)
+    await gb.page.mouse.click(place_x + 1, place_y + 1)
 
     mon.print_time_and_msg(f"I placed on [{col}, {row}]")
 

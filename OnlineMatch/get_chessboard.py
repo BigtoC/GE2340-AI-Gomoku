@@ -9,6 +9,7 @@ import OnlineMatch.monitor_result as mon
 
 nest_asyncio.apply()
 
+
 async def start_computer_game():
     """
     Go to the match ready page
@@ -30,22 +31,18 @@ async def start_computer_game():
         mon.random_wait()
     mon.print_time_and_msg(f"Website is rendered!")
 
-    asyncio.get_event_loop().run_until_complete(
-        get_chessboard_img("start")
-    )
-
     # Select opponent
     # await page.click(gb.opponent_selector)
     # mon.print_time_and_msg(f"Selected opponent as {gb.opponent_choice}")
     # mon.random_wait()
 
     # Select color
-    await page.click(gb.color_selector)
+    await page.click(gb.color_selectors[gb.start_color])
     mon.print_time_and_msg(f"Color selected as {gb.start_color}")
     mon.random_wait()
 
     # Select level
-    await page.click(gb.level_selector)
+    await page.click(gb.level_selectors[gb.level_choice])
     mon.print_time_and_msg(f"Selected level {gb.level_choice}")
     mon.random_wait()
 

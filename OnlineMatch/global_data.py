@@ -16,16 +16,16 @@ color_selectors = {
     "w": "#color > option:nth-child(2)"  # White
 }
 start_color = "w"
-color_selector = color_selectors[start_color]
+# color_selector = color_selectors[start_color]
 
 level_selectors = {
-    1: "#difficulty > option:nth-child(1)",  # Baby
-    2: "#difficulty > option:nth-child(2)",  # Bright
-    3: "#difficulty > option:nth-child(3)",  # Brainy
-    4: "#difficulty > option:nth-child(4)"   # Best
+    "1": "#difficulty > option:nth-child(1)",  # Baby
+    "2": "#difficulty > option:nth-child(2)",  # Bright
+    "3": "#difficulty > option:nth-child(3)",  # Brainy
+    "4": "#difficulty > option:nth-child(4)"   # Best
 }
-level_choice = 3
-level_selector = level_selectors[level_choice]
+level_choice = 2
+# level_selector = level_selectors[level_choice]
 
 board_start_x = -1
 board_start_y = -1

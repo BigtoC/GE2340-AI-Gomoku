@@ -50,22 +50,35 @@ async def match_result() -> bool:
     :return: True is match ended, False is not
     """
     is_end = False
+    winner = ""
 
     source = Bs(await gb.page.content(), 'lxml').prettify()
 
     if "won" in source:
         is_end = True
 
-    win_regex = re.compile(r'<div id="mess" class="message" style="left: 185px; top: 550px;">(\S+) has won.</div>')
-    winner = re.findall(win_regex, source)[0]
-    gb.winner = winner
-
-    if len(winner) > 1:
-        is_end = True
-        gb.winner = winner
-        print_time_and_msg(f"CHECKMATE! {winner} wins!")
-
     return is_end
+
+
+async def print_result():
+    """
+    Print the winner
+    :return: None
+    """
+    source = Bs(await gb.page.content(), 'lxml')
+    win_regex = re.compile(r'<div id="mess" class="message" style="left: 185px; top: 550px;">(\S+) has won.</div>')
+    try:
+        winner = re.findall(win_regex, str(source))[0]
+        print_time_and_msg(f"CHECKMATE! {winner} wins!")
+    except IndexError:
+        pass
+
+
+def test_placement():
+    placement = int(random.uniform(0, 15))
+    while placement % 38 != 0:
+        placement = int(random.uniform(0, 15))
+    return placement
 
 
 if __name__ == '__main__':
