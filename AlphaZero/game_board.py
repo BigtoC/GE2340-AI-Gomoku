@@ -16,6 +16,12 @@ class Board(object):
     """
 
     def __init__(self, **kwargs):
+        self.availables = list(range(self.width * self.height))
+        self.last_move = move
+        self.current_player = (
+            self.players[0] if self.current_player == self.players[1]
+            else self.players[1]
+        )
         self.width = int(kwargs.get('width', 11))
         self.height = int(kwargs.get('height', 11))
         self.states = {}
@@ -29,7 +35,7 @@ class Board(object):
 
         self.feature_planes = 8
         # how many binary feature planes we use,
-        # in alphago zero is 17 and the input to the neural network is 19x19x17
+        # in AlphaGo zero is 17 and the input to the neural network is 19x19x17
         # here is a (self.feature_planes+1) x self.width x self.height binary feature planes,
         # the self.feature_planes is the number of history features
         # the additional plane is the color feature that indicate the current player
@@ -47,7 +53,6 @@ class Board(object):
             raise Exception('board width and height can not be '
                             'less than {}'.format(self.n_in_row))
         self.current_player = self.players[start_player]  # start player
-        self.availables = list(range(self.width * self.height))
         # keep available moves in a list
         # once a move has been played, remove it right away
         self.states = {}
@@ -149,12 +154,7 @@ class Board(object):
         # save the last some moves in deque，so as to construct the binary feature planes
         self.availables.remove(move)
         # remove the played move from self.availables
-        self.current_player = (
-            self.players[0] if self.current_player == self.players[1]
-            else self.players[1]
-        )
         # change the current player
-        self.last_move = move
 
     def has_a_winner(self):
         """
@@ -218,6 +218,38 @@ class Board(object):
         return self.current_player
 
 
+def graphic(board, player1, player2):
+    """
+    Draw the board and show game info
+    """
+    width = board.width
+    height = board.height
+
+    print("Player", player1, "with X".rjust(3))
+    print("Player", player2, "with O".rjust(3))
+    print(board.states)
+    print(' ' * 2, end='')
+    # rjust()
+    # http://www.runoob.com/python/att-string-rjust.html
+    for x in range(width):
+        print("{0:4}".format(x), end='')
+    # print('\r\n')
+    print('\r')
+    for i in range(height - 1, -1, -1):
+        print("{0:4d}".format(i), end='')
+        for j in range(width):
+            loc = i * width + j
+            p = board.states.get(loc, -1)
+            if p == player1:
+                print('X'.center(4), end='')
+            elif p == player2:
+                print('O'.center(4), end='')
+            else:
+                print('-'.center(4), end='')
+        # print('\r\n') # new line
+        print('\r')
+
+
 class Game(object):
     """
     game server
@@ -228,37 +260,6 @@ class Game(object):
         init a board
         """
         self.board = board
-
-    def graphic(self, board, player1, player2):
-        """
-        Draw the board and show game info
-        """
-        width = board.width
-        height = board.height
-
-        print("Player", player1, "with X".rjust(3))
-        print("Player", player2, "with O".rjust(3))
-        print(board.states)
-        print(' ' * 2, end='')
-        # rjust()
-        # http://www.runoob.com/python/att-string-rjust.html
-        for x in range(width):
-            print("{0:4}".format(x), end='')
-        # print('\r\n')
-        print('\r')
-        for i in range(height - 1, -1, -1):
-            print("{0:4d}".format(i), end='')
-            for j in range(width):
-                loc = i * width + j
-                p = board.states.get(loc, -1)
-                if p == player1:
-                    print('X'.center(4), end='')
-                elif p == player2:
-                    print('O'.center(4), end='')
-                else:
-                    print('-'.center(4), end='')
-            # print('\r\n') # new line
-            print('\r')
 
     def start_play(self, player1, player2, start_player=0, is_shown=1, print_prob=True):
         """
@@ -275,7 +276,7 @@ class Game(object):
         players = {p1: player1, p2: player2}
 
         if is_shown:
-            self.graphic(self.board, player1.player, player2.player)
+            graphic(self.board, player1.player, player2.player)
 
         while True:
             current_player = self.board.get_current_player()
@@ -288,7 +289,7 @@ class Game(object):
 
             if is_shown:
                 print('player %r move : %r' % (current_player, [move // self.board.width, move % self.board.width]))
-                self.graphic(self.board, player1.player, player2.player)
+                graphic(self.board, player1.player, player2.player)
             end, winner = self.board.game_end()
 
             if end:
@@ -318,7 +319,7 @@ class Game(object):
             # perform a move
             self.board.do_move(move)
             if is_shown:
-                self.graphic(self.board, p1, p2)
+                graphic(self.board, p1, p2)
             end, winner = self.board.game_end()
             if end:
                 # winner from the perspective of the current player of each state

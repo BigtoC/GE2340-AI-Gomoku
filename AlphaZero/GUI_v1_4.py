@@ -207,9 +207,13 @@ class GUI:
         """
         if messages:
             self.messages = messages
-        pygame.draw.rect(self.screen, self._background_color, (0, self.ScreenSize[1]-self.UnitSize*2, self.ScreenSize[0], self.UnitSize))
+        pygame.draw.rect(self.screen, self._background_color,
+                         (0, self.ScreenSize[1]-self.UnitSize*2, self.ScreenSize[0], self.UnitSize)
+                         )
         self._draw_round(False)
-        self._draw_text(self.messages, (self.ScreenSize[0]/2, self.ScreenSize[1]-self.UnitSize*1.5), text_height=self.TestSize)
+        self._draw_text(self.messages,
+                        (self.ScreenSize[0]/2, self.ScreenSize[1]-self.UnitSize*1.5),
+                        text_height=self.TestSize)
         self._draw_score()
 
     def _draw_score(self, update=True):
@@ -220,7 +224,8 @@ class GUI:
             pygame.display.update()
 
     def _draw_round(self, update=True):
-        self._draw_text('Round: ' + str(self.round_counter), (self.ScreenSize[0]*0.88, self.ScreenSize[1] - self.UnitSize*1.5),
+        self._draw_text('Round: ' + str(self.round_counter),
+                        (self.ScreenSize[0]*0.88, self.ScreenSize[1] - self.UnitSize*1.5),
                         backgroud_color=self._background_color, text_height=self.TestSize)
         if update:
             pygame.display.update()
@@ -241,7 +246,8 @@ class GUI:
             x, y = self.move_2_loc(loc)
         else:
             x, y = loc
-        pos = int(self.UnitSize * 1.5 + x * self.UnitSize), int(self.UnitSize * 1.5 + (self.BoardSize - y - 1) * self.UnitSize)
+        pos = int(self.UnitSize * 1.5 + x * self.UnitSize), \
+              int(self.UnitSize * 1.5 + (self.BoardSize - y - 1) * self.UnitSize)
         if player == 1:
             c = (0, 0, 0)
         elif player == 2:
@@ -281,7 +287,8 @@ class GUI:
                              (board_lenth + self.UnitSize*0.5, start + self.UnitSize))
             pygame.draw.rect(self.screen, (0, 0, 0), (self.UnitSize, self.UnitSize, board_lenth, board_lenth), 1)
             # coordinate values
-            self._draw_text(self.BoardSize - i - 1, (self.UnitSize / 2, start + self.UnitSize), text_height=self.TestSize)  # 竖的
+            self._draw_text(self.BoardSize - i - 1,
+                            (self.UnitSize / 2, start + self.UnitSize), text_height=self.TestSize)  # 竖的
             self._draw_text(i, (start + self.UnitSize, self.UnitSize / 2), text_height=self.TestSize)  # 横的
 
         # draw buttons
