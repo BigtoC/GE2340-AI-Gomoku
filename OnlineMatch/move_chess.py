@@ -4,13 +4,11 @@ import cv2
 import imutils
 from skimage.measure import compare_ssim
 import math
-import pysnooper
-import random
+import time
 
-import OnlineMatch.global_data as gb
-import OnlineMatch.monitor_result as mon
-import OnlineMatch.get_internet_move as im
-import AlphaZero.get_alphazero_move as az
+import global_data as gb
+import monitor_result as mon
+import om_movement as az
 
 
 # @pysnooper.snoop()
@@ -86,6 +84,8 @@ def cal_coord(cv2, img_me, img_opp, x, y, w, h):
 
 
 async def move():
+    while int(time.time() % 60) % 2 == 1:
+        time.sleep(0.5)
     col, row = az.width_height_coord
 
     # while col == gb.last_computer_x and row == gb.last_computer_y \

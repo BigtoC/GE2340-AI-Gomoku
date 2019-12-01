@@ -2,10 +2,10 @@
 
 import asyncio
 
-import OnlineMatch.global_data as gb
-import OnlineMatch.monitor_result as mon
-import OnlineMatch.get_chessboard as chess
-import OnlineMatch.move_chess as move
+import global_data as gb
+import monitor_result as mon
+import get_chessboard as chess
+import move_chess as move
 
 
 def config_match():

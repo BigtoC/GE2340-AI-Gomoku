@@ -3,9 +3,10 @@
 import time
 import random
 from _datetime import datetime
-import OnlineMatch.global_data as gb
 from bs4 import BeautifulSoup as Bs
 import re
+
+import global_data as gb
 
 
 def random_wait():
