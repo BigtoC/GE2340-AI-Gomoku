@@ -3,12 +3,10 @@ from AlphaZero.game_board import Board, Game
 from AlphaZero.mcts_pure import MCTSPlayer as MCTS_pure
 from AlphaZero.mcts_alphaZero import MCTSPlayer
 from AlphaZero.policy_value_net_tensorlayer import PolicyValueNet
-import time
-from os import path
-import os
-from collections import defaultdict
+from os import *
 
 from OnlineMatch import get_internet_move as internet
+
 
 class Human(object):
     """
@@ -20,8 +18,8 @@ class Human(object):
     def set_player_ind(self, p):
         self.player = p
 
-    def get_action(self, board,is_selfplay=False,print_probs_value=0):
-        # no use params in the func : is_selfplay,print_probs_value
+    def get_action(self, board, is_selfplay=False, print_probs_value=0):
+        # no use params in the func : is_selfplay, print_probs_value
         # just to stay the same with AI's API
         try:
             width = internet.width_height_coord[0]
@@ -42,14 +40,14 @@ class Human(object):
 
 
 def run(start_player=0,is_shown=1):
-    # run a gomoku game with AI
+    # run a Gomoku game with AI
     # you can set
     # human vs AI or AI vs AI
     n = 5
     width, height = 15, 15
     model_file = 'model_15_15_5/best_policy.model'
     p = os.getcwd()
-    model_file = path.join(p,model_file)
+    model_file = path.join(p, model_file)
 
     board = Board(width=width, height=height, n_in_row=n)
     game = Game(board)
@@ -78,7 +76,7 @@ def run(start_player=0,is_shown=1):
 
     # human / Internet player, input your move in the format: 2,3
     # set start_player=0 for human first
-    # play in termianl without GUI
+    # play in terminal without GUI
 
     human = Human()
     win = game.start_play(human, alpha_zero_player, start_player=start_player, is_shown=is_shown,print_prob=True)

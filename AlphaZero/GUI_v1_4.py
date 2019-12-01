@@ -219,14 +219,14 @@ class GUI:
     def _draw_score(self, update=True):
         score = 'Score: ' + str(self.score[0]) + ' : ' + str(self.score[1])
         self._draw_text(score, (self.ScreenSize[0] * 0.11, self.ScreenSize[1] - self.UnitSize*1.5),
-                        backgroud_color=self._background_color, text_height=self.TestSize)
+                        background_color=self._background_color, text_height=self.TestSize)
         if update:
             pygame.display.update()
 
     def _draw_round(self, update=True):
         self._draw_text('Round: ' + str(self.round_counter),
                         (self.ScreenSize[0]*0.88, self.ScreenSize[1] - self.UnitSize*1.5),
-                        backgroud_color=self._background_color, text_height=self.TestSize)
+                        background_color=self._background_color, text_height=self.TestSize)
         if update:
             pygame.display.update()
 
@@ -276,16 +276,16 @@ class GUI:
         # draw background
         self.screen.fill(self._background_color)
         # draw board
-        board_lenth = self.UnitSize * self.BoardSize
+        board_length = self.UnitSize * self.BoardSize
         pygame.draw.rect(self.screen, self._board_color, self.areas['board'])
         for i in range(self.BoardSize):
             # draw grid lines
             start = self.UnitSize * (i + 0.5)
             pygame.draw.line(self.screen, (0, 0, 0), (start + self.UnitSize, self.UnitSize*1.5),
-                             (start + self.UnitSize, board_lenth + self.UnitSize*0.5))
+                             (start + self.UnitSize, board_length + self.UnitSize*0.5))
             pygame.draw.line(self.screen, (0, 0, 0), (self.UnitSize*1.5, start + self.UnitSize),
-                             (board_lenth + self.UnitSize*0.5, start + self.UnitSize))
-            pygame.draw.rect(self.screen, (0, 0, 0), (self.UnitSize, self.UnitSize, board_lenth, board_lenth), 1)
+                             (board_length + self.UnitSize*0.5, start + self.UnitSize))
+            pygame.draw.rect(self.screen, (0, 0, 0), (self.UnitSize, self.UnitSize, board_length, board_length), 1)
             # coordinate values
             self._draw_text(self.BoardSize - i - 1,
                             (self.UnitSize / 2, start + self.UnitSize), text_height=self.TestSize)  # 竖的
@@ -298,7 +298,7 @@ class GUI:
 
         self.show_messages()
 
-    def _draw_text(self, text, position, text_height=25, font_color=(0, 0, 0), backgroud_color=None, pos='center',
+    def _draw_text(self, text, position, text_height=25, font_color=(0, 0, 0), background_color=None, pos='center',
                    angle=0):
         """
         draw text
@@ -306,14 +306,14 @@ class GUI:
         :param position: the location point
         :param text_height: text height
         :param font_color: font color
-        :param backgroud_color: background color
+        :param background_color: background color
         :param pos: the location point is where in the text rectangle.
         'center','top','bottom','left','right'and their combination such as 'topleft' can be selected
         :param angle: the rotation angle of the text
         """
         posx, posy = position
         font_obj = pygame.font.Font(None, int(text_height))
-        text_surface_obj = font_obj.render(str(text), True, font_color, backgroud_color)
+        text_surface_obj = font_obj.render(str(text), True, font_color, background_color)
         text_surface_obj = pygame.transform.rotate(text_surface_obj, angle)
         text_rect_obj = text_surface_obj.get_rect()
         exec('text_rect_obj.' + pos + ' = (posx, posy)')
