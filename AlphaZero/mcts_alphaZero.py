@@ -34,11 +34,11 @@ class TreeNode(object):
         self._P = prior_p  # its the prior probability that action's taken to get this node
 
     def expand(self, action_priors, add_noise):
-        """
+        '''
         Expand tree by creating new children.
         action_priors: a list of tuples of actions and their prior probability
             according to the policy function.
-        """
+        '''
         # when train by self-play, add dirichlet noises in each node
 
         # should note it's different from paper that only add noises in root node
@@ -92,7 +92,7 @@ class TreeNode(object):
         # If it is not root, this node's parent should be updated first.
         if self._parent:
             self._parent.update_recursive(-leaf_value)
-            # every step for recursive update,
+            # every step for revursive update,
             # we should change the perspective by the way of taking the negative
         self.update(leaf_value)
 
@@ -229,9 +229,9 @@ class MCTSPlayer(object):
     """
 
     def __init__(self, policy_value_function, action_fc, evaluation_fc, c_puct=5, n_playout=400, is_selfplay=0):
-        """
+        '''
         init some parameters
-        """
+        '''
         self._is_selfplay = is_selfplay
         self.policy_value_function = policy_value_function
         self.action_fc = action_fc

@@ -1,11 +1,13 @@
 from __future__ import print_function
-from AlphaZero.game_board import Board, Game
-from AlphaZero.mcts_pure import MCTSPlayer as MCTS_pure
-from AlphaZero.mcts_alphaZero import MCTSPlayer
-from AlphaZero.policy_value_net_tensorlayer import PolicyValueNet
-from os import *
-
-from OnlineMatch import get_internet_move as internet
+from game_board import Board, Game
+from mcts_pure import MCTSPlayer as MCTS_pure
+from mcts_alphaZero import MCTSPlayer
+from policy_value_net_tensorlayer import PolicyValueNet
+import time
+from os import path
+import os
+from collections import defaultdict
+import sys
 
 
 class Human(object):
@@ -19,13 +21,18 @@ class Human(object):
         self.player = p
 
     def get_action(self, board, is_selfplay=False, print_probs_value=0):
-        # no use params in the func : is_selfplay, print_probs_value
+        # no use params in the func : is_selfplay,print_probs_value
         # just to stay the same with AI's API
         try:
-            width = internet.width_height_coord[0]
-            height = internet.width_height_coord[1]
+            # width = internet.width_height_coord[0]
+            # height = internet.width_height_coord[1]
+            #
+            # location = width + height * 15
 
-            location = width + height * 15
+            location = input("Your move: ")
+            if isinstance(location, str):  # for python3
+                location = [int(n, 10) for n in location.split(",")]
+            move = board.location_to_move(location)
 
             move = board.location_to_move(location)
         except Exception as e:
@@ -40,14 +47,14 @@ class Human(object):
 
 
 def run(start_player=0,is_shown=1):
-    # run a Gomoku game with AI
+    # run a gomoku game with AI
     # you can set
     # human vs AI or AI vs AI
     n = 5
     width, height = 15, 15
     model_file = 'model_15_15_5/best_policy.model'
     p = os.getcwd()
-    model_file = path.join(p, model_file)
+    model_file = path.join(p,model_file)
 
     board = Board(width=width, height=height, n_in_row=n)
     game = Game(board)
@@ -76,10 +83,10 @@ def run(start_player=0,is_shown=1):
 
     # human / Internet player, input your move in the format: 2,3
     # set start_player=0 for human first
-    # play in terminal without GUI
+    # play in termianl without GUI
 
     human = Human()
-    win = game.start_play(human, alpha_zero_player, start_player=start_player, is_shown=is_shown,print_prob=True)
+    win = game.start_play(human, alpha_zero_player, start_player=start_player, is_shown=is_shown, print_prob=True)
     print(win)
     # return win
 
@@ -88,4 +95,5 @@ def run(start_player=0,is_shown=1):
 
 
 if __name__ == '__main__':
-    run(start_player=0,is_shown=True)
+    sys.setrecursionlimit(20000)
+    run(start_player=0, is_shown=True)

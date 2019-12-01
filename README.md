@@ -7,8 +7,8 @@ Group Project for [GE2340](https://www.cityu.edu.hk/catalogue/ug/current/course/
 ---
 
 ## Configuration
-- tensorboard         1.10.0
-- tensorflow          1.10.0
+- tensorboard         1.12.0
+- tensorflow          1.13.1
 - tensorlayer         1.10.1
   
 ## AlphaZero

@@ -4,10 +4,7 @@ import monitor_result as mon
 width_height_coord = [-1, -1]
 
 
-def set_move(move):
-
-    height = move // 15
-    width = move % 15
+def set_move(width, height):
 
     with open("../steps.yaml") as f:
         movement = yaml.safe_load(f)
@@ -51,5 +48,5 @@ def opponent_moved() -> bool:
 if __name__ == '__main__':
     # get_move()
     print(width_height_coord)
-    set_move(35)
+    set_move(10, 6)
     print(width_height_coord)

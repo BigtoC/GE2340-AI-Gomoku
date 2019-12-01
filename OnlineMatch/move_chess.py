@@ -37,7 +37,6 @@ def get_opponent_move() -> tuple:
     row = -1
 
     for c in cnts:
-        # 231 229 73 39
         (x, y, w, h) = cv2.boundingRect(c)
         const_b = 38
 
@@ -66,6 +65,8 @@ def get_opponent_move() -> tuple:
     cv2.imwrite("Pictures/diff.png", img_opp)
     # cv2.waitKey(0)
 
+    az.set_move(col, row)
+
     mon.print_time_and_msg(f"Opponent placed on [{col}, {row}]")
 
     return col, row
@@ -85,8 +86,10 @@ def cal_coord(cv2, img_me, img_opp, x, y, w, h):
 
 async def move():
     while int(time.time() % 60) % 2 == 1:
-        time.sleep(0.5)
+        time.sleep(0.3)
+    az.get_move()
     col, row = az.width_height_coord
+    mon.print_time_and_msg(f"Got steps {col}, {row}")
 
     # while col == gb.last_computer_x and row == gb.last_computer_y \
     #         or col == gb.last_place_x and row == gb.last_place_y:
