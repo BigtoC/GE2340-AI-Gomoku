@@ -6,7 +6,8 @@ Group Project for [GE2340](https://www.cityu.edu.hk/catalogue/ug/current/course/
 
 ---
 ## Battle video
-The result of AlphaZero VS Online Gomoku is avaliable on [YouTube](https://www.youtube.com/playlist?list=PL4nBMCNLJMG7MNGBUwLIJyixv4ZU-GYID)
+The result of AlphaZero VS Online Gomoku is avaliable on [YouTube](https://www.youtube.com/playlist?list=PL4nBMCNLJMG7MNGBUwLIJyixv4ZU-GYID)  
+Also avaliable in the [yaml file](https://github.com/BigtoC/GE2340-AI-Gomoku/blob/master/AlphaZero/MatchResult.yaml)
 
   
 ## Configuration
