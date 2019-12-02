@@ -15,7 +15,7 @@ def rollout_policy_fn(board):
     """
     a coarse, fast version of policy_fn used in the rollout phase.
     """
-    action_probs = np.random.rand(len(board.availables)) # rollout randomly
+    action_probs = np.random.rand(len(board.availables))  # roll out randomly
     return zip(board.availables, action_probs)
 
 
@@ -41,7 +41,7 @@ class TreeNode(object):
         self._n_visits = 0
         self._Q = 0
         self._u = 0
-        self._P = prior_p # its the prior probability that action's taken to get this node
+        self._P = prior_p  # its the prior probability that action's taken to get this node
 
     def expand(self, action_priors):
         """
@@ -138,7 +138,7 @@ class MCTS(object):
         State is modified in-place, so a copy must be provided.
         """
         node = self._root
-        while(1):
+        while 1:
             # select action in tree
             if node.is_leaf():
                 # break if the node is leaf node

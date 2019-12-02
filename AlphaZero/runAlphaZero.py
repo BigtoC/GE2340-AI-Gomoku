@@ -39,8 +39,8 @@ class Human(object):
             move = -1
         if move == -1 or move not in board.availables:
             print("invalid move")
-            move,_ = self.get_action(board)
-        return move,None
+            move, _ = self.get_action(board)
+        return move, None
 
     def __str__(self):
         return "Human {}".format(self.player)
@@ -54,14 +54,14 @@ def run(start_player=0, is_shown=1):
     width, height = 15, 15
     model_file = 'model_15_15_5/best_policy.model'
     p = os.getcwd()
-    model_file = path.join(p,model_file)
+    model_file = path.join(p, model_file)
 
     board = Board(width=width, height=height, n_in_row=n)
     game = Game(board)
 
-    mcts_player = MCTS_pure(5,400)
+    mcts_player = MCTS_pure(5, 400)
 
-    best_policy = PolicyValueNet(board_width=width,board_height=height,block=19,init_model=model_file,cuda=True)
+    best_policy = PolicyValueNet(board_width=width, board_height=height, block=19, init_model=model_file, cuda=True)
 
     # alpha_zero vs alpha_zero
 

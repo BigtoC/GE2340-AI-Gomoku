@@ -1,7 +1,12 @@
 <component name="ProjectDictionaryState">
   <dictionary name="14250">
     <words>
+      <w>availables</w>
+      <w>cuda</w>
       <w>gomoku</w>
+      <w>mcts</w>
+      <w>posx</w>
+      <w>probs</w>
       <w>resnet</w>
       <w>screenshot</w>
     </words>

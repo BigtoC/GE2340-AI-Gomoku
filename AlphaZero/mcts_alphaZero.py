@@ -42,7 +42,7 @@ class TreeNode(object):
         # when train by self-play, add dirichlet noises in each node
 
         # should note it's different from paper that only add noises in root node
-        # i guess alphago zero discard the whole tree after each move and rebuild a new tree, so it's no conflict
+        # i guess AlphaGo zero discard the whole tree after each move and rebuild a new tree, so it's no conflict
         # while here i contained the Node under the chosen action, it's a little different.
         # there's no idea which is better
         # in addition, the parameters should be tried

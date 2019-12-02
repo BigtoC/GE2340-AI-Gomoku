@@ -12,6 +12,41 @@ import os
 import numpy as np
 
 
+def save_numpy(params):
+    """
+    save the model in numpy form
+    """
+    print('saving model as numpy form ...')
+    param = []
+    for each in params:
+        param.append(np.array(each.eval()))
+    param = np.array(param)
+    np.save('tmp/model.npy', param)
+
+
+def residual_block(incoming, out_channels, is_train, nb_block=1):
+    """
+    a simple resnet block structure
+    """
+    resnet = incoming
+    for i in range(nb_block):
+        identity = resnet
+        # in_channels = incoming.outputs.get_shape().as_list()[-1]
+        resnet = tl.layers.Conv2d(resnet, n_filter=out_channels, filter_size=(3, 3), strides=(1, 1),
+                                  padding='SAME', name='resnet_conv2d_' + str(i) + '_1')
+        resnet = tl.layers.BatchNormLayer(resnet, is_train=is_train, act=tf.nn.relu,
+                                          name='resnet_bn_' + str(i) + '_1')
+        resnet = tl.layers.Conv2d(resnet, n_filter=out_channels, filter_size=(3, 3), strides=(1, 1),
+                                  padding='SAME', name='resnet_conv2d_' + str(i) + '_2')
+        resnet = tl.layers.BatchNormLayer(resnet, is_train=is_train, name='resnet_bn_' + str(i) + '_2')
+
+        resnet = tl.layers.ElementwiseLayer([resnet, identity], combine_fn=tf.add,
+                                            name='elementwise_layer_' + str(i))
+        resnet = MyActLayer(resnet, act=tf.nn.relu, name='activation_layer_' + str(i))
+
+    return resnet
+
+
 class PolicyValueNet():
     def __init__(self, board_width, board_height, block, init_model=None, transfer_model=None, cuda=True):
         print()
@@ -20,7 +55,7 @@ class PolicyValueNet():
 
         self.planes_num = 9  # feature planes
         self.nb_block = block  # resnet blocks
-        if cuda == False:
+        if not cuda:
             # use GPU or not, if there are a few GPUs, it's better to assign GPU ID
             os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
             os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
@@ -66,8 +101,7 @@ class PolicyValueNet():
 
         # Define the optimizer we use for training
         self.learning_rate = tf.placeholder(tf.float32)
-        self.optimizer = tf.train.AdamOptimizer(
-            learning_rate=self.learning_rate).minimize(self.loss)
+        self.optimizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate).minimize(self.loss)
 
         # calc policy entropy, for monitoring only
         self.entropy = tf.negative(tf.reduce_mean(
@@ -110,17 +144,6 @@ class PolicyValueNet():
                                                                                is_train=False, label='_oppo')
 
         self.network_oppo_all_params = tf.global_variables()[len(tf.global_variables()) - len(self.network_all_params):]
-
-    def save_numpy(self, params):
-        """
-        save the model in numpy form
-        """
-        print('saving model as numpy form ...')
-        param = []
-        for each in params:
-            param.append(np.array(each.eval()))
-        param = np.array(param)
-        np.save('tmp/model.npy', param)
 
     def load_numpy(self, params, path='tmp/model.npy'):
         """
@@ -237,21 +260,21 @@ class PolicyValueNet():
 
             input_state = tf.transpose(input_states, [0, 2, 3, 1])
             # NCHW->NHWC
-            inputlayer = tl.layers.InputLayer(input_state, name='input')
+            input_layer = tl.layers.InputLayer(input_state, name='input')
 
             # 2. Common Networks Layers
             # these layers designed by myself
-            inputlayer = tl.layers.ZeroPad2d(inputlayer, 2, name='zeropad2d')
-            conv1 = tl.layers.Conv2d(inputlayer,
+            input_layer = tl.layers.ZeroPad2d(input_layer, 2, name='zeropad2d')
+            conv1 = tl.layers.Conv2d(input_layer,
                                      n_filter=64,
                                      filter_size=(1, 1),
                                      strides=(1, 1),
                                      padding='SAME',
                                      name='conv2d_1')
-            residual_layer = self.residual_block(incoming=conv1,
-                                                 out_channels=64,
-                                                 is_train=is_train,
-                                                 nb_block=self.nb_block)
+            residual_layer = residual_block(incoming=conv1,
+                                            out_channels=64,
+                                            is_train=is_train,
+                                            nb_block=self.nb_block)
             # 3-1 Action Networks
             # these layers are the same as paper's
             action_conv = tl.layers.Conv2d(residual_layer,
@@ -291,28 +314,6 @@ class PolicyValueNet():
                                                   name='flatten_layer_3')
 
             return action_fc.outputs, evaluation_fc2.outputs
-
-    def residual_block(self, incoming, out_channels, is_train, nb_block=1):
-        """
-        a simple resnet block structure
-        """
-        resnet = incoming
-        for i in range(nb_block):
-            identity = resnet
-            # in_channels = incoming.outputs.get_shape().as_list()[-1]
-            resnet = tl.layers.Conv2d(resnet, n_filter=out_channels, filter_size=(3, 3), strides=(1, 1),
-                                      padding='SAME', name='resnet_conv2d_' + str(i) + '_1')
-            resnet = tl.layers.BatchNormLayer(resnet, is_train=is_train, act=tf.nn.relu,
-                                              name='resnet_bn_' + str(i) + '_1')
-            resnet = tl.layers.Conv2d(resnet, n_filter=out_channels, filter_size=(3, 3), strides=(1, 1),
-                                      padding='SAME', name='resnet_conv2d_' + str(i) + '_2')
-            resnet = tl.layers.BatchNormLayer(resnet, is_train=is_train, name='resnet_bn_' + str(i) + '_2')
-
-            resnet = tl.layers.ElementwiseLayer([resnet, identity], combine_fn=tf.add,
-                                                name='elementwise_layer_' + str(i))
-            resnet = MyActLayer(resnet, act=tf.nn.relu, name='activation_layer_' + str(i))
-
-        return resnet
 
 
 class MyActLayer(Layer):
