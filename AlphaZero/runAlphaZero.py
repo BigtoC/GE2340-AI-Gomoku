@@ -46,8 +46,8 @@ class Human(object):
         return "Human {}".format(self.player)
 
 
-def run(start_player=0,is_shown=1):
-    # run a gomoku game with AI
+def run(start_player=0, is_shown=1):
+    # run a Gomoku game with AI
     # you can set
     # human vs AI or AI vs AI
     n = 5

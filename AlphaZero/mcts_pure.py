@@ -12,28 +12,28 @@ from collections import defaultdict
 
 
 def rollout_policy_fn(board):
-    '''
+    """
     a coarse, fast version of policy_fn used in the rollout phase.
-    '''
+    """
     action_probs = np.random.rand(len(board.availables)) # rollout randomly
     return zip(board.availables, action_probs)
 
 
 def policy_value_fn(board):
-    '''
+    """
     a function that takes in a state and outputs a list of (action, probability)
     tuples and a score for the state
-    '''
+    """
     # return uniform probabilities and 0 score for pure MCTS
     action_probs = np.ones(len(board.availables))/len(board.availables)
     return zip(board.availables, action_probs), 0
 
 
 class TreeNode(object):
-    '''
+    """
     A node in the MCTS tree. Each node keeps track of its own value Q,
     prior probability P, and its visit-count-adjusted prior score u.
-    '''
+    """
 
     def __init__(self, parent, prior_p):
         self._parent = parent
@@ -132,11 +132,11 @@ class MCTS(object):
         self._n_playout = n_playout # times of tree search
 
     def _playout(self, state):
-        '''
+        """
         Run a single playout from the root to the leaf, getting a value at
         the leaf and propagating it back through its parents.
         State is modified in-place, so a copy must be provided.
-        '''
+        """
         node = self._root
         while(1):
             # select action in tree
@@ -164,11 +164,11 @@ class MCTS(object):
         # print('after update...', node._n_visits, node._Q)
 
     def _evaluate_rollout(self, state, limit=1000):
-        '''
+        """
         Use the rollout policy to play until the end of the game,
         returning +1 if the current player wins, -1 if the opponent wins,
         and 0 if it is a tie.
-        '''
+        """
         player = state.get_current_player()
         for i in range(limit):
             end, winner = state.game_end()
@@ -252,13 +252,13 @@ class MCTSPlayer(object):
         """
         self.mcts.update_with_move(-1) # reset the node
 
-    def get_action(self, board,is_selfplay=False,print_probs_value=0):
+    def get_action(self, board, is_selfplay=False, print_probs_value=0):
         """
         get an action by mcts
         do not discard all the tree and retain the useful part
         """
         sensible_moves = board.availables
-        if board.last_move!=-1:
+        if board.last_move != -1:
             self.mcts.update_with_move(last_move=board.last_move)
             # reuse the tree
             # retain the tree that can continue to use
