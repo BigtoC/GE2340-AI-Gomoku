@@ -12,10 +12,10 @@ import numpy as np
 import os
 import time
 from collections import defaultdict, deque
-from AlphaZero.game_board import Board,Game
-from AlphaZero.mcts_pure import MCTSPlayer as MCTS_Pure
-from AlphaZero.mcts_alphaZero import MCTSPlayer
-from AlphaZero.policy_value_net_tensorlayer import PolicyValueNet
+from game_board import Board,Game
+from mcts_pure import MCTSPlayer as MCTS_Pure
+from mcts_alphaZero import MCTSPlayer
+from policy_value_net_tensorlayer import PolicyValueNet
 
 class TrainPipeline():
     def __init__(self, init_model=None,transfer_model=None):

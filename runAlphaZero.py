@@ -1,8 +1,8 @@
 from __future__ import print_function
-from AlphaZero.game_board import Board, Game
-from AlphaZero.mcts_pure import MCTSPlayer as MCTS_pure
-from AlphaZero.mcts_alphaZero import MCTSPlayer
-from AlphaZero.policy_value_net_tensorlayer import PolicyValueNet
+from game_board import Board, Game
+from mcts_pure import MCTSPlayer as MCTS_pure
+from mcts_alphaZero import MCTSPlayer
+from policy_value_net_tensorlayer import PolicyValueNet
 import time
 from os import path
 import os
