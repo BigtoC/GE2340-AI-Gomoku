@@ -4,8 +4,8 @@ from pyppeteer import launch
 import asyncio
 import nest_asyncio
 
-import OnlineMatch.global_data as gb
-import OnlineMatch.monitor_result as mon
+import global_data as gb
+import monitor_result as mon
 
 nest_asyncio.apply()
 

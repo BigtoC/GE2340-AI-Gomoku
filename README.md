@@ -5,14 +5,19 @@ Group Project for [GE2340](https://www.cityu.edu.hk/catalogue/ug/current/course/
 2. Play online matches using AlphaZero (Here's the [match website](https://dkmgames.com/Gomoku/gomoku.htm))  
 
 ---
+## Battle video
+The result of AlphaZero VS Online Gomoku is avaliable on [YouTube](https://www.youtube.com/playlist?list=PL4nBMCNLJMG7MNGBUwLIJyixv4ZU-GYID)  
+Also avaliable in the [yaml file](https://github.com/BigtoC/GE2340-AI-Gomoku/blob/master/AlphaZero/MatchResult.yaml)
 
+  
 ## Configuration
-- tensorboard         1.10.0
-- tensorflow          1.10.0
+- tensorboard         1.12.0
+- tensorflow          1.13.1
 - tensorlayer         1.10.1
   
 ## AlphaZero
 #### Train Model using existing AlphaZero Algorithm  
+  
   
 ## Online-Match
 #### Controls the browser to auto match online using [Pyppeteer](https://github.com/miyakogi/pyppeteer)
